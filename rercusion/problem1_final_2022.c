@@ -31,7 +31,7 @@
 //     array = [3,101,96,47,41,7,65,9,13,5,79,45,30,11,43]
 //     size = length of array
 //     findTwinPrimes(array, size)
-int isPrime(int num,int divisor){
+int isPrime(int num,int divisor){ 
     if(num<2)return 0; //O(1)
     if(divisor==1)return 1; //(O(1))
     if(num%divisor==0)return 0;//O(1)
