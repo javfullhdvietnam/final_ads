@@ -1,66 +1,80 @@
-Iterative Version (C)
+Iterative Algorithm in C
 #include <stdio.h>
 #include <string.h>
 
-int main(){
-    char s[1000];
-    scanf("%s", s);
-    int n = 0; 
-    while(s[n]) n++;
-    for(int i=0;i<n-1;i++){
-        char mn=s[i]; 
-        int idx=i; 
-        for(int j=n-1;j>i;j--){
-            if(((s[j]<mn)&&(i>0||s[j]!='0'))||(s[j]==mn&&j>idx)){
-                mn=s[j]; 
-                idx=j;
+void findLargestIterative(char* num) {
+    int n = strlen(num);
+    for (int i = 0; i < n - 1; i++) {
+        char max_digit = num[i];
+        int max_index = i;
+
+        for (int j = n - 1; j > i; j--) {
+            if (num[j] > max_digit) {
+                max_digit = num[j];
+                max_index = j;
             }
         }
-        if(idx!=i){
-            char t=s[i]; 
-            s[i]=s[idx]; 
-            s[idx]=t; 
+
+        if (max_index != i) {
+            char temp = num[i];
+            num[i] = num[max_index];
+            num[max_index] = temp;
             break;
         }
     }
-    printf("%s\n", s);
+}
+
+int main() {
+    char number[1000];
+    scanf("%s", number);
+    findLargestIterative(number);
+    printf("Largest possible value: %s\n", number);
     return 0;
 }
-Recursive Version (C)
+Recursive Algorithm in C
 #include <stdio.h>
 #include <string.h>
 
-void r(char *s,int i,int n,int *done){
-    if(i>=n-1||*done) return;
-    char mn=s[i]; 
-    int idx=i; 
-    for(int j=n-1;j>i;j--){
-        if(((s[j]<mn)&&(i>0||s[j]!='0'))||(s[j]==mn&&j>idx)){
-            mn=s[j]; 
-            idx=j;
+void findLargestRecursive(char* num, int start, int n, int* swapped) {
+    if (start >= n - 1 || *swapped) return;
+
+    char max_digit = num[start];
+    int max_index = start;
+
+    for (int j = n - 1; j > start; j--) {
+        if (num[j] > max_digit) {
+            max_digit = num[j];
+            max_index = j;
         }
     }
-    if(idx!=i){
-        char t=s[i]; 
-        s[i]=s[idx]; 
-        s[idx]=t; 
-        *done=1;
+
+    if (max_index != start) {
+        char temp = num[start];
+        num[start] = num[max_index];
+        num[max_index] = temp;
+        *swapped = 1;
     } else {
-        r(s,i+1,n,done);
+        findLargestRecursive(num, start + 1, n, swapped);
     }
 }
 
-int main(){
-    char s[1000];
-    scanf("%s",s);
-    int n=strlen(s),done=0;
-    r(s,0,n,&done);
-    printf("%s\n",s);
+int main() {
+    char number[1000];
+    scanf("%s", number);
+    int swapped = 0;
+    findLargestRecursive(number, 0, strlen(number), &swapped);
+    printf("Largest possible value: %s\n", number);
     return 0;
 }
-Complexity Analysis
-Both the iterative and recursive solutions perform a nested search for the best digit to swap, leading to 
-O(n^2) time complexity in the worst case, where 
-𝑛
-n is the number of digits. The space complexity for both is O(n)
-due to storing digits in an auxiliary array.
+Complexity Analysis:
+
+Iterative Algorithm:
+
+Time Complexity: O(n^2). The algorithm involves a nested loop where the outer loop runs n times (in the worst case), and the inner loop compares each digit from the current index to the end.
+Space Complexity: O(1). The algorithm works in-place and uses constant extra memory.
+Recursive Algorithm:
+
+Time Complexity: O(n^2). Similar to the iterative approach, the recursion involves nested comparisons for n digits in the worst case.
+Space Complexity: O(n). The recursive approach uses additional memory for the recursive call stack, proportional to the number of recursive calls.
+Both approaches ultimately have the same time complexity, but the recursive method has slightly higher space complexity due to the call stack.
+
