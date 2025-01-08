@@ -14,46 +14,66 @@ typedef struct {
     int size;
 } Vector3DList;
 
-double euclidean_distance(Vector3D v1, Vector3D v2) {
-    double dx = v2.x - v1.x;
-    double dy = v2.y - v1.y;
-    double dz = v2.z - v1.z;
-    return sqrt(dx * dx + dy * dy + dz * dz);
+double cosineSimilarity(Vector3D v1, Vector3D v2) {
+    double dot = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+
+    double mag1 = sqrt((v1.x * v1.x) + (v1.y * v1.y) + (v1.z * v1.z));
+
+    double mag2 = sqrt((v2.x * v2.x) + (v2.y * v2.y) + (v2.z * v2.z));
+
+    if (mag1 == 0.0 || mag2 == 0.0) {
+        return 0.0;
+    }
+
+    return dot / (mag1 * mag2);
 }
 
-void display(Vector3DList* list) {
+void displayVectorsAndDistanceMatrix(const Vector3DList* list) {
     int n = list->size;
-    printf("list of 3D vector:\n");
+
+    printf("List of 3D Vectors (size = %d):\n", n);
     for (int i = 0; i < n; i++) {
-        printf("vector[%d] = (%.2f, %.2f, %.2f)\n",
+        printf("Vector[%d] = (%.2f, %.2f, %.2f)\n",
                i,
                list->arr[i].x,
                list->arr[i].y,
                list->arr[i].z);
     }
 
-    printf("\ndistance matrix (%d x %d):\n", n, n);
+    printf("\nCosine Similarity Matrix (%d x %d):\n", n, n);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            double dist = euclidean_distance(list->arr[i], list->arr[j]);
-            printf("%.2f ", dist);
+            double sim = cosineSimilarity(list->arr[i], list->arr[j]);
+            printf("%.4f ", sim);
         }
         printf("\n");
     }
 }
 
-
 int main() {
     Vector3DList list;
-    
-    list.size = 4;
+    list.size = 0;
 
-    list.arr[0].x = 0.0;  list.arr[0].y = 0.0;  list.arr[0].z = 0.0;
-    list.arr[1].x = 1.0;  list.arr[1].y = 2.0;  list.arr[1].z = 3.0;
-    list.arr[2].x = -1.5; list.arr[2].y = 2.5;  list.arr[2].z = 0.0;
-    list.arr[3].x = 3.0;  list.arr[3].y = 3.0;  list.arr[3].z = 3.0;
+    int n;
+    printf("Enter the number of 3D vectors: ");
+    scanf("%d", &n);
 
-    display(&list);
+
+    if (n < 0 || n > MAX_SIZE) {
+        printf("Invalid input for number of vectors!\n");
+        return 1;
+    }
+
+    list.size = n;
+    for (int i = 0; i < n; i++) {
+        printf("Enter x, y, z for vector %d: ", i);
+        scanf("%lf %lf %lf",
+              &list.arr[i].x,
+              &list.arr[i].y,
+              &list.arr[i].z);
+    }
+
+    displayVectorsAndDistanceMatrix(&list);
 
     return 0;
 }
