@@ -6,4 +6,5 @@
 // d(v1,v2) =v1*v2/|v1|*|v2|
 //where v1*v2 = x1*x2 + y1*y2 + z1*z2 and |v1| = sqrt(x1^2 + y1^2 + z1^2)
 //write a function to display matrix the vectors in a list and the distance matrix
-//write a function to test all the above functions
+//write a function to the vectors in a list and the distance matrix
+//note the disstance matrix is square and if the size n*n each element of the matrix (i,j) is the distance between the vector i and j
