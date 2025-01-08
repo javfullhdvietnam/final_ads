@@ -28,24 +28,24 @@ long long digits_to_number(int digits[], int length) {
     return result;
 }
 
-// iteration
+//iteration
 long long swap_iteration(long long num) {
     int digits[30];
     int n = number_to_digits(num, digits);
 
     for (int i = 0; i < n - 1; i++) {
-        int minDigit = digits[i];
-        int minPos = i;
+        int maxDigit = digits[i];
+        int maxPos = i;
         for (int j = n - 1; j > i; j--) {
-            if (digits[j] < minDigit && !(i == 0 && digits[j] == 0)) {
-                minDigit = digits[j];
-                minPos = j;
+            if (digits[j] > maxDigit && !(i == 0 && digits[j] == 0)) {
+                maxDigit = digits[j];
+                maxPos = j;
             }
         }
-        if (minPos != i) {
+        if (maxPos != i) {
             int temp = digits[i];
-            digits[i] = digits[minPos];
-            digits[minPos] = temp;
+            digits[i] = digits[maxPos];
+            digits[maxPos] = temp;
             break;
         }
     }
@@ -53,25 +53,24 @@ long long swap_iteration(long long num) {
     return digits_to_number(digits, n);
 }
 
-
-// recursion
+//recursion
 bool recursive_swap(int digits[], int n, int i) {
     if (i >= n - 1) {
         return false;
     }
 
-    int minDigit = digits[i];
-    int minPos = i;
+    int maxDigit = digits[i];
+    int maxPos = i;
     for (int j = n - 1; j > i; j--) {
-        if (digits[j] < minDigit && !(i == 0 && digits[j] == 0)) {
-            minDigit = digits[j];
-            minPos = j;
+        if (digits[j] > maxDigit && !(i == 0 && digits[j] == 0)) {
+            maxDigit = digits[j];
+            maxPos = j;
         }
     }
-    if (minPos != i) {
+    if (maxPos != i) {
         int temp = digits[i];
-        digits[i] = digits[minPos];
-        digits[minPos] = temp;
+        digits[i] = digits[maxPos];
+        digits[maxPos] = temp;
         return true;
     } else {
         return recursive_swap(digits, n, i + 1);
@@ -91,22 +90,19 @@ long long swap_recursion(long long num) {
 int main(void) {
     long long num = 51229;
 
-    //iteration
-    long long smallest_iteration = swap_iteration(num);
-    printf("smallest value using iteration is: %lld\n", smallest_iteration);
+    long long largest_iteration = swap_iteration(num);
+    printf("largest value using iteration: %lld\n", largest_iteration);
 
-    //recursion
-    long long smallest_recursion = swap_recursion(num);
-    printf("smallest value using recursion is: %lld\n", smallest_recursion);
+    long long largest_recursion = swap_recursion(num);
+    printf("largest value using recursion: %lld\n", largest_recursion);
 
     return 0;
 }
 
 /*
-Complexity:
+Time Complexity:
 
-- with iteration: We use two nested loops (i, j). In the worst case => the complexity is O(n^2).
-- with recursion: we still have an inner loop to find the smallest digit on the right side, 
-then plus the recursion stepping from i=0 to i+1 etc. In the worst case => complexity also reaches O(n^2).
-
+- with iteration: We use two nested loops (i and j). In the worst case => O(n^2).
+- with recursion: We still have an inner loop to find the largest digit on the right side,
+  plus the recursion stepping from i=0 to i+1. In the worst case => also O(n^2).
 */
