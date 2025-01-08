@@ -89,7 +89,7 @@ long long swap_recursion(long long num) {
 
 //main func
 int main(void) {
-    long long num = 51029;
+    long long num = 51229;
 
     //iteration
     long long smallest_iteration = swap_iteration(num);
