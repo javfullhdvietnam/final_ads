@@ -16,3 +16,5 @@
 //     }
 //   }
 //}
+// Initialize an array of the size >=6. Array values are initalized based on your choice
+// explain the sorting process and display the result at each iteration of the sorting process

@@ -15,7 +15,8 @@ int swap(int n){
     int max = n;
     for(int i = 0; i < 5; i++){
         for(int j = i+1; j < 5; j++){
-           int a = (n/pow(10, i))%10;
+           int a = n%10;
+           
     }
     return max;
 }
