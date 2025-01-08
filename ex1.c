@@ -5,6 +5,6 @@
 //propose and implement an alternative algorithm using recursion for this task 
 //calculate the complexity of the two approaches.justify your answer by making comment on the code
 int main(){
-    int n = 51229
-    
+    int n = 51229;
+
 }
