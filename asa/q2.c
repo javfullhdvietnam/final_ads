@@ -8,13 +8,12 @@ typedef struct {
 
 typedef struct {
     Vector3D* vectors;
-    int size;
-    int capacity;
+    int size, capacity;
 } Vector3DList;
 
 Vector3DList* createList(int capacity) {
-    Vector3DList* list = (Vector3DList*)malloc(sizeof(Vector3DList));
-    list->vectors = (Vector3D*)malloc(capacity * sizeof(Vector3D));
+    Vector3DList* list = malloc(sizeof(Vector3DList));
+    list->vectors = malloc(capacity * sizeof(Vector3D));
     list->size = 0;
     list->capacity = capacity;
     return list;
@@ -22,15 +21,23 @@ Vector3DList* createList(int capacity) {
 
 void addVector(Vector3DList* list, double x, double y, double z) {
     if (list->size < list->capacity) {
-        list->vectors[list->size].x = x;
-        list->vectors[list->size].y = y;
-        list->vectors[list->size].z = z;
-        list->size++;
+        list->vectors[list->size++] = (Vector3D){x, y, z};
     }
 }
 
-double calculateDistance(Vector3D v1, Vector3D v2) {
-    return sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2) + pow(v1.z - v2.z, 2));
+double dotProduct(Vector3D v1, Vector3D v2) {
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+double magnitude(Vector3D v) {
+    return sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+}
+
+double cosineSimilarity(Vector3D v1, Vector3D v2) {
+    double mag1 = magnitude(v1);
+    double mag2 = magnitude(v2);
+    if (mag1 == 0 || mag2 == 0) return 0;
+    return dotProduct(v1, v2) / (mag1 * mag2);
 }
 
 void displayVectors(Vector3DList* list) {
@@ -39,10 +46,12 @@ void displayVectors(Vector3DList* list) {
     }
 }
 
-void displayDistanceMatrix(Vector3DList* list) {
-    for (int i = 0; i < list->size; i++) {
-        for (int j = 0; j < list->size; j++) {
-            printf("%.2f ", calculateDistance(list->vectors[i], list->vectors[j]));
+void displayCosineSimilarityMatrix(Vector3DList* list) {
+    int n = list->size;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            double cosSim = cosineSimilarity(list->vectors[i], list->vectors[j]);
+            printf("%.4f ", cosSim);
         }
         printf("\n");
     }
@@ -50,17 +59,17 @@ void displayDistanceMatrix(Vector3DList* list) {
 
 int main() {
     int capacity, n;
-    scanf("%d", &capacity);
+    scanf("%d %d", &capacity, &n);
     Vector3DList* list = createList(capacity);
-    scanf("%d", &n);
     for (int i = 0; i < n; i++) {
         double x, y, z;
         scanf("%lf %lf %lf", &x, &y, &z);
         addVector(list, x, y, z);
     }
     displayVectors(list);
-    displayDistanceMatrix(list);
+    displayCosineSimilarityMatrix(list);
     free(list->vectors);
     free(list);
     return 0;
 }
+
